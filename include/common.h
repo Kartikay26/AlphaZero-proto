@@ -64,8 +64,8 @@ public:
 
 enum class Square
 {
-    first = 1,
-    second = -1,
+    first = -1,
+    second = 1,
     empty = 0,
 };
 
@@ -81,10 +81,10 @@ Player opponent(Player p);
 
 enum class Outcome
 {
-    running,
-    draw,
     first_won = int(Player::first),
     second_won = int(Player::second),
+    running,
+    draw,
 };
 
 bool isTerminal(Outcome o);
