@@ -2,20 +2,23 @@
 
 void recurse(GameState g, int i = 0);
 
+set<string> s;
+
 int main()
 {
     GameState g;
     recurse(g);
+    cout << s.size() << endl;
 }
 
 void recurse(GameState g, int i)
 {
-    for (int k = 0; k < i; k++)
-    {
-        std::cout << " ";
-    }
+    // for (int k = 0; k < i; k++)
+    // {
+    //     cout << " ";
+    // }
 
-    std::cout << g << std::endl;
+    // cout << g << endl;
 
     auto acts = g.possibleActions();
 
@@ -26,4 +29,6 @@ void recurse(GameState g, int i)
             recurse(g.playAction(k), i + 1);
         }
     }
+
+    s.insert(g.toString());
 }

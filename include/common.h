@@ -1,6 +1,21 @@
 #pragma once
 
+// from stdlib
+
 #include <bits/stdc++.h>
+
+using std::set;
+using std::map;
+using std::string;
+using std::cout;
+using std::endl;
+using std::vector;
+using std::array;
+using std::ostream;
+using std::ostringstream;
+using std::any_of;
+
+// constants / config
 
 const int BOARD_SIZE = 9;
 const int MAX_ACTIONS = 9;
@@ -24,16 +39,15 @@ class Output;
 // ============================ mcts.cpp ============================
 
 // ==================================================================
-// ==================================================================
 
 // ========================== tictactoe.cpp =========================
 
 class GameState
 {
+    friend class Image;
+
 private:
     Square board[BOARD_SIZE];
-
-    friend class Image;
 
 public:
     GameState(); // root of game tree
@@ -41,14 +55,12 @@ public:
     bool checkPlayerWon(Player p);
     Outcome evaluate();
     bool terminated();
-    std::array<bool, MAX_ACTIONS> possibleActions();
+    array<bool, MAX_ACTIONS> possibleActions();
     GameState playAction(int action);
 
-    friend std::ostream &operator<<(std::ostream &out, GameState g); // print
-    std::string toString();
+    friend ostream &operator<<(ostream &out, GameState g); // print
+    string toString();
 };
-
-// ==================================================================
 
 enum class Square
 {
@@ -79,17 +91,26 @@ bool isTerminal(Outcome o);
 
 // ========================== neuralnet.cpp =========================
 
+// Fake neural net, for now
+
 class NeuralNet
 {
-};
+private:
+    map<string, Output> trained;
 
-// ==================================================================
+public:
+    Output predict(Image i);
+    void train(Image i, Output o);
+};
 
 class Image
 {
-public:
-    double img[3][3];
+    friend class NeuralNet;
 
+private:
+    string str;
+
+public:
     Image(GameState g);
 };
 

@@ -30,7 +30,7 @@ Player GameState::turn()
 
 bool GameState::checkPlayerWon(Player p)
 {
-    std::vector<std::vector<int>> winningCombinations = {
+    vector<vector<int>> winningCombinations = {
         {0, 1, 2},
         {3, 4, 5},
         {6, 7, 8},
@@ -41,7 +41,7 @@ bool GameState::checkPlayerWon(Player p)
         {2, 4, 6},
     };
 
-    for (std::vector<int> &v : winningCombinations)
+    for (vector<int> &v : winningCombinations)
     {
         bool all = true;
         for (int i : v)
@@ -74,7 +74,7 @@ Outcome GameState::evaluate()
     }
     else
     {
-        bool squares_remain = std::any_of(board, board + BOARD_SIZE, [=](Square sq) {
+        bool squares_remain = any_of(board, board + BOARD_SIZE, [=](Square sq) {
             return sq == Square::empty;
         });
 
@@ -94,9 +94,9 @@ bool GameState::terminated()
     return isTerminal(evaluate());
 }
 
-std::array<bool, MAX_ACTIONS> GameState::possibleActions()
+array<bool, MAX_ACTIONS> GameState::possibleActions()
 {
-    std::array<bool, MAX_ACTIONS> actions;
+    array<bool, MAX_ACTIONS> actions;
     actions.fill(false);
 
     if (terminated())
@@ -124,7 +124,7 @@ GameState GameState::playAction(int action)
     return next;
 }
 
-std::ostream &operator<<(std::ostream &out, GameState g)
+ostream &operator<<(ostream &out, GameState g)
 {
     out << "[";
 
@@ -144,17 +144,15 @@ std::ostream &operator<<(std::ostream &out, GameState g)
     out << "]";
 }
 
-std::string GameState::toString(){
-    std::ostringstream out;
+string GameState::toString(){
+    ostringstream out;
     out << (*this);
     return out.str();
 }
 
-// ==================================================================
-
 char represent(Square sq)
 {
-    std::map<Square, char> mapping = {
+    map<Square, char> mapping = {
         {Square::empty, '.'},
         {Square::first, 'x'},
         {Square::second, 'o'},
