@@ -13,22 +13,10 @@ int main()
 
 void recurse(GameState g, int i)
 {
-    // for (int k = 0; k < i; k++)
-    // {
-    //     cout << " ";
-    // }
-
-    // cout << g << endl;
-
-    auto acts = g.possibleActions();
-
-    for (int k = 0; k < MAX_ACTIONS; k++)
-    {
-        if (acts[k])
-        {
-            recurse(g.playAction(k), i + 1);
-        }
-    }
-
     s.insert(g.toString());
+
+    for (int a : g.getPossibleActions())
+    {
+        recurse(g.playAction(a), i + 1);
+    }
 }

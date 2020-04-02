@@ -94,10 +94,9 @@ bool GameState::terminated()
     return isTerminal(evaluate());
 }
 
-array<bool, MAX_ACTIONS> GameState::possibleActions()
+vector<int> GameState::getPossibleActions()
 {
-    array<bool, MAX_ACTIONS> actions;
-    actions.fill(false);
+    vector<int> actions;
 
     if (terminated())
     {
@@ -109,7 +108,7 @@ array<bool, MAX_ACTIONS> GameState::possibleActions()
         {
             if (board[i] == Square::empty)
             {
-                actions[i] = true;
+                actions.push_back(i);
             }
         }
         return actions;
@@ -119,7 +118,7 @@ array<bool, MAX_ACTIONS> GameState::possibleActions()
 GameState GameState::playAction(int action)
 {
     GameState next = (*this);
-    assert(possibleActions()[action] == true);
+    assert(getPossibleActions()[action] == true);
     next.board[action] = Square(turn());
     return next;
 }
