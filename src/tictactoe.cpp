@@ -63,7 +63,6 @@ bool GameState::checkPlayerWon(Player p)
 
 Outcome GameState::evaluate()
 {
-
     if (checkPlayerWon(Player::first))
     {
         return Outcome::first_won;
@@ -105,7 +104,7 @@ array<bool, MAX_ACTIONS> GameState::getPossibleActions()
     }
     else
     {
-        for (int i = 0; i <= BOARD_SIZE; ++i)
+        for (int i = 0; i <= BOARD_SIZE; i++)
         {
             if (board[i] == Square::empty)
             {
@@ -119,7 +118,11 @@ array<bool, MAX_ACTIONS> GameState::getPossibleActions()
 GameState GameState::playAction(int action)
 {
     GameState next = (*this);
-    assert(getPossibleActions()[action] == true);
+    // assert(getPossibleActions()[action] == true);
+    if (next.board[action] != Square::empty)
+    {
+        throw InvalidMove();
+    }
     next.board[action] = Square(turn());
     return next;
 }
@@ -128,23 +131,24 @@ ostream &operator<<(ostream &out, GameState g)
 {
     out << "[";
 
-    for (int i = 0; i < 3; ++i)
+    for (int i = 0; i < 3; i++)
         out << represent(g.board[i]);
 
     out << "|";
 
-    for (int i = 3; i < 6; ++i)
+    for (int i = 3; i < 6; i++)
         out << represent(g.board[i]);
 
     out << "|";
 
-    for (int i = 6; i < 9; ++i)
+    for (int i = 6; i < 9; i++)
         out << represent(g.board[i]);
 
     out << "]";
 }
 
-string GameState::toString(){
+string GameState::toString()
+{
     ostringstream out;
     out << (*this);
     return out.str();

@@ -4,26 +4,30 @@
 
 #include <bits/stdc++.h>
 
-using std::set;
-using std::map;
-using std::string;
+using std::accumulate;
+using std::any_of;
+using std::array;
 using std::cout;
 using std::endl;
-using std::vector;
-using std::array;
+using std::exception;
+using std::function;
+using std::map;
 using std::ostream;
 using std::ostringstream;
-using std::any_of;
+using std::pair;
+using std::set;
+using std::string;
+using std::vector;
 
-// constants / config
+// constants
 
-const int BOARD_SIZE = 9;
-const int MAX_ACTIONS = 9;
+#include "config.h"
 
 // ==================================================================
 // ========================== tictactoe.cpp =========================
 
 class GameState;
+class InvalidMove;
 enum class Square;
 enum class Player;
 enum class Outcome;
@@ -36,7 +40,20 @@ class Output;
 
 // ========================== selfplay.cpp ==========================
 
+// ========================== evaluate.cpp ==========================
+
+int randomMove(GameState g);
+
+Outcome playGame(function<int(GameState)> player1, function<int(GameState)> player2);
+
+pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
+
 // ============================ mcts.cpp ============================
+
+// =========================== helpers.cpp ==========================
+
+int randomInt(int min, int max);
+float randomFloat(float min, float max);
 
 // ==================================================================
 
@@ -62,11 +79,15 @@ public:
     string toString();
 };
 
+class InvalidMove : exception
+{
+};
+
 enum class Square
 {
-    first = -1,
-    second = 1,
-    empty = 0,
+    first,
+    second,
+    empty,
 };
 
 char represent(Square sq);

@@ -27,7 +27,7 @@ def plot_thread():
         plt.plot(data, color="grey", linewidth=1)
         plt.draw()
         fig.canvas.flush_events()
-        sleep(0.1)
+        plt.clf()
 
 
 if __name__ == "__main__":
