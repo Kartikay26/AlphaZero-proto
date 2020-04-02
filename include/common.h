@@ -4,16 +4,16 @@
 
 #include <bits/stdc++.h>
 
-using std::any_of;
-using std::array;
+using std::set;
+using std::map;
+using std::string;
 using std::cout;
 using std::endl;
-using std::map;
+using std::vector;
+using std::array;
 using std::ostream;
 using std::ostringstream;
-using std::set;
-using std::string;
-using std::vector;
+using std::any_of;
 
 // constants / config
 
@@ -55,7 +55,7 @@ public:
     bool checkPlayerWon(Player p);
     Outcome evaluate();
     bool terminated();
-    vector<int> getPossibleActions();
+    array<bool, MAX_ACTIONS> getPossibleActions();
     GameState playAction(int action);
 
     friend ostream &operator<<(ostream &out, GameState g); // print
