@@ -144,6 +144,12 @@ std::ostream &operator<<(std::ostream &out, GameState g)
     out << "]";
 }
 
+std::string GameState::toString(){
+    std::ostringstream out;
+    out << (*this);
+    return out.str();
+}
+
 // ==================================================================
 
 char represent(Square sq)
@@ -172,3 +178,5 @@ bool isTerminal(Outcome o)
 {
     return not(o == Outcome::running);
 }
+
+// ==================================================================

@@ -6,6 +6,49 @@ const int BOARD_SIZE = 9;
 const int MAX_ACTIONS = 9;
 
 // ==================================================================
+// ========================== tictactoe.cpp =========================
+
+class GameState;
+enum class Square;
+enum class Player;
+enum class Outcome;
+
+// ========================== neuralnet.cpp =========================
+
+class NeuralNet;
+class Image;
+class Output;
+
+// ========================== selfplay.cpp ==========================
+
+// ============================ mcts.cpp ============================
+
+// ==================================================================
+// ==================================================================
+
+// ========================== tictactoe.cpp =========================
+
+class GameState
+{
+private:
+    Square board[BOARD_SIZE];
+
+    friend class Image;
+
+public:
+    GameState(); // root of game tree
+    Player turn();
+    bool checkPlayerWon(Player p);
+    Outcome evaluate();
+    bool terminated();
+    std::array<bool, MAX_ACTIONS> possibleActions();
+    GameState playAction(int action);
+
+    friend std::ostream &operator<<(std::ostream &out, GameState g); // print
+    std::string toString();
+};
+
+// ==================================================================
 
 enum class Square
 {
@@ -34,23 +77,31 @@ enum class Outcome
 
 bool isTerminal(Outcome o);
 
+// ========================== neuralnet.cpp =========================
+
+class NeuralNet
+{
+};
+
 // ==================================================================
 
-class GameState
+class Image
 {
-private:
-    Square board[BOARD_SIZE];
-
 public:
-    GameState(); // root of game tree
-    Player turn();
-    bool checkPlayerWon(Player p);
-    Outcome evaluate();
-    bool terminated();
-    std::array<bool, MAX_ACTIONS> possibleActions();
-    GameState playAction(int action);
+    double img[3][3];
 
-    friend std::ostream &operator<<(std::ostream &out, GameState g); // print
+    Image(GameState g);
 };
+
+class Output
+{
+public:
+    double evaluation;
+    double policy[9];
+};
+
+// ========================== selfplay.cpp ==========================
+
+// ============================ mcts.cpp ============================
 
 // ==================================================================
