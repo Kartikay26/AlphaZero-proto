@@ -1,7 +1,7 @@
 #include "common.h"
 
 Output NeuralNet::predict(Image i)
-{    
+{
     if (trained.count(i.str))
     {
         return trained[i.str];
@@ -10,9 +10,9 @@ Output NeuralNet::predict(Image i)
     {
         Output o;
         o.evaluation = 0;
-        for (double &p: o.policy)
+        for (double &p : o.policy)
         {
-            p = 1/9.;
+            p = 1 / 9.;
         }
         return o;
     }

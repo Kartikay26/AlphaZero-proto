@@ -4,12 +4,16 @@ void recurse(GameState g, int i = 0);
 
 set<string> s;
 
+// ==================================================================
+
 int main()
 {
     GameState g;
     recurse(g);
     cout << s.size() << endl;
 }
+
+// ==================================================================
 
 void recurse(GameState g, int i)
 {
@@ -20,3 +24,5 @@ void recurse(GameState g, int i)
         recurse(g.playAction(a), i + 1);
     }
 }
+
+// ==================================================================
