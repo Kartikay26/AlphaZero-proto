@@ -137,6 +137,8 @@ pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
 int randomInt(int min, int max);
 float randomFloat(float min, float max);
 
+int sample(const array<float, MAX_ACTIONS> &a);
+
 // ============================ mcts.cpp ============================
 
 array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet n);

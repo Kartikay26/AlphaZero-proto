@@ -7,6 +7,8 @@ const int SELFPLAY_SPEED = 1;
 const int TRAINING_SPEED = 1;
 const int EVALUATION_SPEED = 1;
 
+NeuralNet n;
+
 void initialise()
 {
     cout << "won, drawn, invalid" << endl;
@@ -14,6 +16,12 @@ void initialise()
 
 void selfplay()
 {
+    GameState g;
+    while (not g.terminated())
+    {
+        auto probs = mcts(g, n);
+        int action = sample(probs);
+    }
 }
 
 void training()
@@ -34,7 +42,10 @@ void evaluation()
 
 int main()
 {
-    initialise();
+    // initialise();
+
+    GameState g;
+    auto [eval, probs] = n.predict(Image(g));
 
     while (true)
     {
