@@ -28,4 +28,15 @@ Image::Image(GameState g)
     str = g.toString();
 }
 
+ostream &operator<<(ostream &out, Output &o)
+{
+    out << o.evaluation << " [ ";
+    for (float &p : o.policy)
+    {
+        out << p << " ";
+    }
+    out << "]";
+    return out;
+}
+
 // ==================================================================

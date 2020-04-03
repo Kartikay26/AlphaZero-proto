@@ -1,7 +1,6 @@
 #include "common.h"
 
-array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet n)
+array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet nnet)
 {
-    Output o = n.predict(Image(g));
-    return o.policy;
+    return nnet.predict(Image(g)).policy;
 }

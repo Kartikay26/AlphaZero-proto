@@ -2,12 +2,21 @@
 
 // ==================================================================
 
+// config
+
+const int NUM_EVALUATE = 1000;
+const int BUFFER_SIZE = 10000;
+const int TRAINING_BATCH_SIZE = 1;
+
 // relative speeds
-const int SELFPLAY_SPEED = 0;
-const int TRAINING_SPEED = 0;
+const int SELFPLAY_SPEED = 1;
+const int TRAINING_SPEED = 1;
 const int EVALUATION_SPEED = 1;
 
-NeuralNet n;
+// ==================================================================
+
+NeuralNet nnet;
+ReplayBuffer buffer(BUFFER_SIZE);
 
 ofstream clog("logfile.txt");
 
@@ -22,22 +31,46 @@ void selfplay()
     num_games++;
     clog << "Game #" << num_games << endl;
     GameState g;
+    vector<pair<GameState, Output>> history;
     while (not g.terminated())
     {
-        auto probs = mcts(g, n);
-        int action = sample(probs);
+        auto probs = mcts(g, nnet);
+        history.push_back({g, {0, probs}}); // evaluation to be filled in later
+        int action = randomMove(g);         // sample(probs);
         g = g.playAction(action);
+    }
+    Outcome game_outcome = g.evaluate();
+    if (game_outcome != Outcome::draw)
+    {
+        for (auto &[h, h_output] : history)
+        {
+            if (h.turn() == Player(game_outcome))
+            {
+                h_output.evaluation = +1;
+            }
+            else
+            {
+                h_output.evaluation = -1;
+            }
+        }
+    }
+    for (auto &[g, o] : history)
+    {
+        buffer.insert(g, o);
+        clog << g << " -> " << o << endl;
     }
 }
 
 void training()
 {
+    auto [g, o] = buffer.sample();
+    nnet.train(Image(g), o);
 }
 
 void evaluation()
 {
     auto result = evaluate([](GameState g) -> int {
-        return randomInt(0, 8);
+        return sample(nnet.predict(Image(g)).policy);
     });
     auto [completed, invalid] = result;
     auto [won, drawn] = completed;

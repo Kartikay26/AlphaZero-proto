@@ -8,6 +8,7 @@ using std::accumulate;
 using std::any_of;
 using std::array;
 using std::cout;
+using std::deque;
 using std::endl;
 using std::exception;
 using std::function;
@@ -25,7 +26,9 @@ using std::vector;
 const int BOARD_SIZE = 9;
 const int MAX_ACTIONS = 9;
 
-const int NUM_EVALUATE = 1000;
+extern const int NUM_EVALUATE;
+extern const int BUFFER_SIZE;
+extern const int TRAINING_BATCH_SIZE;
 
 // ==================================================================
 // ========================== tictactoe.cpp =========================
@@ -41,6 +44,10 @@ enum class Outcome;
 class NeuralNet;
 class Image;
 class Output;
+
+// ========================= replaybuffer.cpp =======================
+
+class ReplayBuffer;
 
 // ==================================================================
 // ========================== tictactoe.cpp =========================
@@ -126,6 +133,8 @@ class Output
 public:
     float evaluation;
     array<float, MAX_ACTIONS> policy;
+
+    friend ostream &operator<<(ostream &out, Output &g); // print
 };
 
 // ========================== evaluate.cpp ==========================
@@ -145,6 +154,21 @@ int sample(const array<float, MAX_ACTIONS> &a);
 
 // ============================ mcts.cpp ============================
 
-array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet n);
+array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet nnet);
+
+// ========================= replaybuffer.cpp =======================
+
+class ReplayBuffer
+{
+private:
+    int size;
+    deque<pair<GameState, Output>> queue;
+
+public:
+    ReplayBuffer(int size) : size(size) {}
+
+    void insert(GameState g, Output o);
+    pair<GameState, Output> sample();
+};
 
 // ==================================================================

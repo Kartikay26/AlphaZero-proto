@@ -145,6 +145,7 @@ ostream &operator<<(ostream &out, GameState &g)
         out << represent(g.board[i]);
 
     out << "]";
+    return out;
 }
 
 string GameState::toString()
