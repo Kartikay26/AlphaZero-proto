@@ -1,10 +1,9 @@
+import time
 import threading
 import matplotlib.pyplot as plt
 
-from time import sleep
-
+lgd = []
 data = []
-
 
 def main():
     thread1 = threading.Thread(target=input_thread, name="Input thread")
@@ -15,17 +14,29 @@ def main():
 
 
 def input_thread():
+    global lgd
+    lgd = input().split()
+    for _ in range(len(lgd)):
+        data.append([])
     while True:
         line = input()
-        data.append([float(x) for x in line.split()])
+        line = [float(x) for x in line.split()]
+        for i in range(len(line)):
+            data[i].append(line[i])
 
 
 def plot_thread():
     plt.ion()
+    plt.style.use("seaborn")
     fig = plt.figure()
+    plt.legend()
+    print(lgd)
     while True:
-        plt.plot(data, color="grey", linewidth=1)
+        for i in range(len(lgd)):
+            plt.plot(data[i], linewidth=1, label=lgd[i])
+        plt.legend()
         plt.draw()
+        time.sleep(0.1)
         fig.canvas.flush_events()
         plt.clf()
 

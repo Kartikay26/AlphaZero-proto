@@ -51,7 +51,7 @@ int randomMove(GameState g)
     int seen = 0;
     for (int i = 0; i < MAX_ACTIONS; i++)
     {
-        if(possible[i])
+        if (possible[i])
         {
             seen++;
             if (chosen == seen)
