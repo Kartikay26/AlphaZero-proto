@@ -4,14 +4,14 @@
 
 // config
 
-const int NUM_EVALUATE = 100;
+const int NUM_EVALUATE = 1000;
 const int BUFFER_SIZE = 10000;
-const int TRAINING_BATCH_SIZE = 1000;
+const int TRAINING_BATCH_SIZE = 100;
 
 const int NUM_SIMULATIONS = 20;
 const float C_PUCT = 1.25;
 
-const int SELFPLAY_STEPS = 100;
+const int SELFPLAY_STEPS = 10;
 const int TRAINING_STEPS = 1;
 const int EVALUATION_STEPS = 1;
 
@@ -42,13 +42,10 @@ void test(string s)
 
 int main()
 {
-    // srand(time(NULL));
+    srand(time(NULL));
 
     initialise();
     mainLoop();
-
-    // test("[...|...|...]");
-    // test("[x..|.o.|...]");
 }
 
 // ==================================================================

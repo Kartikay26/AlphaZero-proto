@@ -2,7 +2,7 @@
 
 void initialise()
 {
-    cout << "won, drawn, lost, invalid, known states" << endl;
+    cout << "won, drawn, lost, invalid, known states / 5" << endl;
 }
 
 void selfplay()
@@ -53,8 +53,8 @@ void training()
 void evaluation()
 {
     auto result = evaluate([](GameState g) -> int {
-        // auto probs = nnet.predict(Image(g)).policy;
-        auto probs = mcts(g, nnet);
+        auto probs = nnet.predict(Image(g)).policy;
+        // auto probs = mcts(g, nnet);
         return sample(probs);
     });
     auto [completed, invalid] = result;
@@ -63,7 +63,8 @@ void evaluation()
     cout << won << ", "
          << drawn << ", "
          << lost << ", "
-         << invalid << endl;
+         << invalid << ", "
+         << nnet.known_states() / 5 << endl;
 }
 
 void mainLoop()
