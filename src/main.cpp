@@ -3,8 +3,8 @@
 // ==================================================================
 
 // relative speeds
-const int SELFPLAY_SPEED = 1;
-const int TRAINING_SPEED = 1;
+const int SELFPLAY_SPEED = 0;
+const int TRAINING_SPEED = 0;
 const int EVALUATION_SPEED = 1;
 
 NeuralNet n;

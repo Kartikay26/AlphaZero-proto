@@ -5,6 +5,7 @@ import threading
 import matplotlib.pyplot as plt
 from argparse import ArgumentParser
 
+title = ""
 data = []
 
 parser = ArgumentParser(
@@ -26,8 +27,10 @@ def main():
 
 
 def input_thread():
+    global title
+    title = input().strip(",")
     while True:
-        line = input()
+        line = input().strip(",")
         data.append(float(line))
 
 
@@ -37,6 +40,7 @@ def plot_thread():
     fig = plt.figure()
     while True:
         plt.hist(data, bins=args.bins)
+        plt.title(title)
         plt.draw()
         time.sleep(args.timedelay)
         fig.canvas.flush_events()
