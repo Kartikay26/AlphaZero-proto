@@ -1,10 +1,5 @@
 #include "common.h"
 
-NeuralNet nnet;
-ReplayBuffer buffer(BUFFER_SIZE);
-
-ofstream clog("logfile.txt");
-
 void initialise()
 {
     srand(time(NULL));
@@ -75,11 +70,11 @@ void mainLoop()
     while (true)
     {
         // approximation for running jobs in parallel
-        for (int i = 0; i < SELFPLAY_SPEED; i++)
+        for (int i = 0; i < SELFPLAY_STEPS; i++)
             selfplay();
-        for (int i = 0; i < TRAINING_SPEED; i++)
+        for (int i = 0; i < TRAINING_STEPS; i++)
             training();
-        for (int i = 0; i < EVALUATION_SPEED; i++)
+        for (int i = 0; i < EVALUATION_STEPS; i++)
             evaluation();
     }
 }

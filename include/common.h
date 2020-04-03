@@ -30,9 +30,12 @@ extern const int NUM_EVALUATE;
 extern const int BUFFER_SIZE;
 extern const int TRAINING_BATCH_SIZE;
 
-extern const int SELFPLAY_SPEED;
-extern const int TRAINING_SPEED;
-extern const int EVALUATION_SPEED;
+extern const int SELFPLAY_STEPS;
+extern const int TRAINING_STEPS;
+extern const int EVALUATION_STEPS;
+
+extern const int NUM_SIMULATIONS;
+extern const float C_PUCT;
 
 // ==================================================================
 // ========================== tictactoe.cpp =========================
@@ -59,6 +62,14 @@ void initialise();
 void mainLoop();
 
 // ==================================================================
+
+// globals
+
+extern NeuralNet nnet;
+extern ReplayBuffer buffer;
+
+extern ofstream clog;
+
 // ========================== tictactoe.cpp =========================
 
 class GameState
@@ -78,7 +89,7 @@ public:
     GameState playAction(int action);
 
     friend ostream &operator<<(ostream &out, GameState &g); // print
-    string toString();
+    string hash();
 };
 
 class InvalidMove : exception
@@ -131,7 +142,7 @@ class Image
     friend class NeuralNet;
 
 private:
-    string str;
+    string hash;
 
 public:
     Image(GameState g);
@@ -163,7 +174,9 @@ int sample(const array<float, MAX_ACTIONS> &a);
 
 // ============================ mcts.cpp ============================
 
-array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet nnet);
+array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet &nnet);
+
+float simulate(GameState s, NeuralNet &nnet);
 
 // ========================= replaybuffer.cpp =======================
 

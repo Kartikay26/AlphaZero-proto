@@ -2,9 +2,9 @@
 
 Output NeuralNet::predict(Image i)
 {
-    if (trained.count(i.str))
+    if (trained.count(i.hash))
     {
-        return trained[i.str];
+        return trained[i.hash];
     }
     else
     {
@@ -12,7 +12,7 @@ Output NeuralNet::predict(Image i)
         o.evaluation = 0;
         for (float &p : o.policy)
         {
-            p = 1 / 9.;
+            p = 1. / MAX_ACTIONS;
         }
         return o;
     }
@@ -20,12 +20,12 @@ Output NeuralNet::predict(Image i)
 
 void NeuralNet::train(Image i, Output o)
 {
-    trained[i.str] = o;
+    trained[i.hash] = o;
 }
 
 Image::Image(GameState g)
 {
-    str = g.toString();
+    hash = g.hash();
 }
 
 ostream &operator<<(ostream &out, Output &o)

@@ -148,7 +148,7 @@ ostream &operator<<(ostream &out, GameState &g)
     return out;
 }
 
-string GameState::toString()
+string GameState::hash()
 {
     ostringstream out;
     out << (*this);
