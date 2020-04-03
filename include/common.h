@@ -12,6 +12,7 @@ using std::endl;
 using std::exception;
 using std::function;
 using std::map;
+using std::ofstream;
 using std::ostream;
 using std::ostringstream;
 using std::pair;

@@ -9,6 +9,8 @@ const int EVALUATION_SPEED = 1;
 
 NeuralNet n;
 
+ofstream clog("logfile.txt");
+
 void initialise()
 {
     cout << "won, drawn, invalid" << endl;
@@ -16,11 +18,15 @@ void initialise()
 
 void selfplay()
 {
+    static int num_games;
+    num_games++;
+    clog << "Game #" << num_games << endl;
     GameState g;
     while (not g.terminated())
     {
         auto probs = mcts(g, n);
         int action = sample(probs);
+        g = g.playAction(action);
     }
 }
 
@@ -42,10 +48,7 @@ void evaluation()
 
 int main()
 {
-    // initialise();
-
-    GameState g;
-    auto [eval, probs] = n.predict(Image(g));
+    initialise();
 
     while (true)
     {
