@@ -127,7 +127,7 @@ GameState GameState::playAction(int action)
     return next;
 }
 
-ostream &operator<<(ostream &out, GameState g)
+ostream &operator<<(ostream &out, GameState &g)
 {
     out << "[";
 

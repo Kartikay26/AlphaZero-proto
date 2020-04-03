@@ -38,25 +38,7 @@ class NeuralNet;
 class Image;
 class Output;
 
-// ========================== selfplay.cpp ==========================
-
-// ========================== evaluate.cpp ==========================
-
-int randomMove(GameState g);
-
-Outcome playGame(function<int(GameState)> player1, function<int(GameState)> player2);
-
-pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
-
-// ============================ mcts.cpp ============================
-
-// =========================== helpers.cpp ==========================
-
-int randomInt(int min, int max);
-float randomFloat(float min, float max);
-
 // ==================================================================
-
 // ========================== tictactoe.cpp =========================
 
 class GameState
@@ -75,7 +57,7 @@ public:
     array<bool, MAX_ACTIONS> getPossibleActions();
     GameState playAction(int action);
 
-    friend ostream &operator<<(ostream &out, GameState g); // print
+    friend ostream &operator<<(ostream &out, GameState &g); // print
     string toString();
 };
 
@@ -138,12 +120,25 @@ public:
 class Output
 {
 public:
-    double evaluation;
-    double policy[9];
+    float evaluation;
+    array<float, MAX_ACTIONS> policy;
 };
 
-// ========================== selfplay.cpp ==========================
+// ========================== evaluate.cpp ==========================
+
+int randomMove(GameState g);
+
+Outcome playGame(function<int(GameState)> player1, function<int(GameState)> player2);
+
+pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
+
+// =========================== helpers.cpp ==========================
+
+int randomInt(int min, int max);
+float randomFloat(float min, float max);
 
 // ============================ mcts.cpp ============================
+
+array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet n);
 
 // ==================================================================

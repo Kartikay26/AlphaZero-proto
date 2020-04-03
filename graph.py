@@ -25,12 +25,12 @@ def main():
 
 def input_thread():
     global lgd
-    lgd = input().split()
+    lgd = input().split(',')
     for _ in range(len(lgd)):
         data.append([])
     while True:
         line = input()
-        line = [float(x) for x in line.split()]
+        line = [float(x) for x in line.split(',')]
         for i in range(len(line)):
             data[i].append(line[i])
 

@@ -10,7 +10,7 @@ Output NeuralNet::predict(Image i)
     {
         Output o;
         o.evaluation = 0;
-        for (double &p : o.policy)
+        for (float &p : o.policy)
         {
             p = 1 / 9.;
         }
