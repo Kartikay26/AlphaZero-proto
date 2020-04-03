@@ -174,11 +174,13 @@ float randomFloat(float min, float max);
 
 int sample(const array<float, MAX_ACTIONS> &a);
 
+string spaces(int n, char c = ' ');
+
 // ============================ mcts.cpp ============================
 
 array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet &nnet);
 
-float simulate(GameState s, NeuralNet &nnet, bool root = false);
+float simulate(GameState s, NeuralNet &nnet, int depth = 0);
 
 array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet &nnet);
 

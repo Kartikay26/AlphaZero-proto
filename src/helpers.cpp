@@ -23,4 +23,15 @@ int sample(const array<float, MAX_ACTIONS> &a)
             return i;
         }
     }
+    assert(false); // execution shouldn't reach here
+}
+
+string spaces(int n, char c)
+{
+    string ans = "";
+    for (int i = 0; i < n; i++)
+    {
+        ans += c;
+    }
+    return ans;
 }

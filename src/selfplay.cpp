@@ -53,7 +53,8 @@ void training()
 void evaluation()
 {
     auto result = evaluate([](GameState g) -> int {
-        auto probs = nnet.predict(Image(g)).policy;
+        // auto probs = nnet.predict(Image(g)).policy;
+        auto probs = mcts(g, nnet);
         return sample(probs);
     });
     auto [completed, invalid] = result;
@@ -62,8 +63,7 @@ void evaluation()
     cout << won << ", "
          << drawn << ", "
          << lost << ", "
-         << invalid << ", "
-         << nnet.known_states() << endl;
+         << invalid << endl;
 }
 
 void mainLoop()

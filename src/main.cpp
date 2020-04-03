@@ -4,14 +4,14 @@
 
 // config
 
-const int NUM_EVALUATE = 1000;
+const int NUM_EVALUATE = 100;
 const int BUFFER_SIZE = 10000;
 const int TRAINING_BATCH_SIZE = 1000;
 
 const int NUM_SIMULATIONS = 20;
 const float C_PUCT = 1.25;
 
-const int SELFPLAY_STEPS = 10;
+const int SELFPLAY_STEPS = 100;
 const int TRAINING_STEPS = 1;
 const int EVALUATION_STEPS = 1;
 
@@ -31,20 +31,24 @@ void test(string s)
     GameState g(s);
     cout << g << endl;
     auto result = mcts(g, nnet);
+    float d = 0;
     for (auto &x : result)
     {
         cout << x << endl;
+        d += x;
     }
+    cout << "total: " << d << endl;
 }
 
 int main()
 {
-    srand(time(NULL));
+    // srand(time(NULL));
 
     initialise();
     mainLoop();
 
-    // test("[o..|xo.|x..]");
+    // test("[...|...|...]");
+    // test("[x..|.o.|...]");
 }
 
 // ==================================================================
