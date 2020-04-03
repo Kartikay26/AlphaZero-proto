@@ -30,6 +30,10 @@ extern const int NUM_EVALUATE;
 extern const int BUFFER_SIZE;
 extern const int TRAINING_BATCH_SIZE;
 
+extern const int SELFPLAY_SPEED;
+extern const int TRAINING_SPEED;
+extern const int EVALUATION_SPEED;
+
 // ==================================================================
 // ========================== tictactoe.cpp =========================
 
@@ -48,6 +52,11 @@ class Output;
 // ========================= replaybuffer.cpp =======================
 
 class ReplayBuffer;
+
+// =========================== selfplay.cpp =========================
+
+void initialise();
+void mainLoop();
 
 // ==================================================================
 // ========================== tictactoe.cpp =========================
