@@ -80,7 +80,8 @@ private:
     Square board[BOARD_SIZE];
 
 public:
-    GameState(); // root of game tree
+    GameState();         // root of game tree
+    GameState(string s); // from string repr
     Player turn();
     bool checkPlayerWon(Player p);
     Outcome evaluate();
@@ -135,6 +136,7 @@ private:
 public:
     Output predict(Image i);
     void train(Image i, Output o);
+    int known_states() { return trained.size(); }
 };
 
 class Image
@@ -176,7 +178,9 @@ int sample(const array<float, MAX_ACTIONS> &a);
 
 array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet &nnet);
 
-float simulate(GameState s, NeuralNet &nnet);
+float simulate(GameState s, NeuralNet &nnet, bool root = false);
+
+array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet &nnet);
 
 // ========================= replaybuffer.cpp =======================
 

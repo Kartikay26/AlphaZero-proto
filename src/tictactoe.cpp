@@ -8,6 +8,38 @@ GameState::GameState()
     }
 }
 
+GameState::GameState(string str)
+{
+    map<char, Square> mapping = {
+        {'.', Square::empty},
+        {'x', Square::first},
+        {'o', Square::second},
+    };
+    // string: 0123456789012
+    //         [xox|x.x|ooo]
+    // board:  .012.345.678.
+    map<int, int> pos_map = {
+        // str pos to board pos
+        // 0 - x
+        {1, 0},
+        {2, 1},
+        {3, 2},
+        // 4 - x
+        {5, 3},
+        {6, 4},
+        {7, 5},
+        // 8 - x
+        {9, 6},
+        {10, 7},
+        {11, 8},
+        // 9 - x
+    };
+    for (auto [s, b] : pos_map)
+    {
+        board[b] = mapping[str[s]];
+    }
+}
+
 Player GameState::turn()
 {
     int turns = 0;

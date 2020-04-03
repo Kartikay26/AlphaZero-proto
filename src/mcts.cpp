@@ -8,27 +8,34 @@ map<pair<string, int>, float> Q; // Q(s, a) -- action value function
 
 // ========================= mcts core ==============================
 
-array<float, MAX_ACTIONS> mcts(GameState root, NeuralNet &nnet)
+array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet &nnet)
 {
-    // perform NUM_SIMULATIONS simulations to leaf nodes...
-    for (int i = 0; i < NUM_SIMULATIONS; i++)
-    {
-        simulate(root, nnet);
-    }
-
-    // ...and then report probs proportional to visit counts at root.
-    array<float, MAX_ACTIONS> probs;
-    for (int a = 0; a < MAX_ACTIONS; a++)
-    {
-        probs[a] = N[{root.hash(), a}] / float(NUM_SIMULATIONS);
-    }
-    return probs;
+    // FAKE MCTS -- RETURNS UNIFORM DISTRIBUTION
+    return uniform(g, nnet);
 }
+
+// array<float, MAX_ACTIONS> mcts(GameState root, NeuralNet &nnet)
+// {
+//     // perform NUM_SIMULATIONS simulations to leaf nodes...
+//     for (int i = 0; i < NUM_SIMULATIONS; i++)
+//     {
+//         simulate(root, nnet, true);
+//     }
+
+//     // ...and then report probs proportional to visit counts at root.
+//     array<float, MAX_ACTIONS> probs;
+//     for (int a = 0; a < MAX_ACTIONS; a++)
+//     {
+//         probs[a] = N[{root.hash(), a}] / float(NUM_SIMULATIONS);
+//     }
+//     return probs;
+// }
 
 // ====================== mcts simulate algo ========================
 
-float simulate(GameState s, NeuralNet &nnet) // -> returns evaluation of state s acc to s's player
+float simulate(GameState s, NeuralNet &nnet, bool root) // -> returns evaluation of state s acc to s's player
 {
+
     if (s.terminated())
     {
         Outcome actual_outcome = s.evaluate();
@@ -52,9 +59,14 @@ float simulate(GameState s, NeuralNet &nnet) // -> returns evaluation of state s
         visited.insert(s.hash());
         // evaluate the new node and store the probs etc
         Output output = nnet.predict(Image(s));
+        array<float, MAX_ACTIONS> cur_probs = output.policy;
+        if (root)
+        {
+            cur_probs = uniform(s, nnet);
+        }
         for (int a = 0; a < MAX_ACTIONS; a++)
         {
-            P[{s.hash(), a}] = output.policy[a];
+            P[{s.hash(), a}] = cur_probs[a];
         }
         // return the output of the evaluation
         return output.evaluation;
@@ -107,6 +119,25 @@ float simulate(GameState s, NeuralNet &nnet) // -> returns evaluation of state s
 
     // return value of leaf node (according to us)
     return value;
+}
+
+array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet &nnet)
+{
+    auto actions = g.getPossibleActions();
+    int num_actions = accumulate(actions.begin(), actions.end(), 0);
+    array<float, MAX_ACTIONS> probs;
+    for (int i = 0; i < MAX_ACTIONS; i++)
+    {
+        if (actions[i])
+        {
+            probs[i] = 1. / num_actions;
+        }
+        else
+        {
+            probs[i] = 0;
+        }
+    }
+    return probs;
 }
 
 // ==================================================================

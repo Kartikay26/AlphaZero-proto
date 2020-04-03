@@ -2,8 +2,7 @@
 
 void initialise()
 {
-    srand(time(NULL));
-    cout << "won, drawn, lost, invalid" << endl;
+    cout << "won, drawn, lost, invalid, known states" << endl;
 }
 
 void selfplay()
@@ -54,7 +53,8 @@ void training()
 void evaluation()
 {
     auto result = evaluate([](GameState g) -> int {
-        return sample(nnet.predict(Image(g)).policy);
+        auto probs = nnet.predict(Image(g)).policy;
+        return sample(probs);
     });
     auto [completed, invalid] = result;
     auto [won, drawn] = completed;
@@ -62,7 +62,8 @@ void evaluation()
     cout << won << ", "
          << drawn << ", "
          << lost << ", "
-         << invalid << endl;
+         << invalid << ", "
+         << nnet.known_states() << endl;
 }
 
 void mainLoop()
@@ -70,11 +71,11 @@ void mainLoop()
     while (true)
     {
         // approximation for running jobs in parallel
+        for (int i = 0; i < EVALUATION_STEPS; i++)
+            evaluation();
         for (int i = 0; i < SELFPLAY_STEPS; i++)
             selfplay();
         for (int i = 0; i < TRAINING_STEPS; i++)
             training();
-        for (int i = 0; i < EVALUATION_STEPS; i++)
-            evaluation();
     }
 }
