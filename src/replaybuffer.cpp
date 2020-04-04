@@ -12,5 +12,5 @@ void ReplayBuffer::insert(GameState g, Output o)
 
 pair<GameState, Output> ReplayBuffer::sample()
 {
-    return queue[randomInt(0, queue.size())];
+    return queue[randomInt(0, queue.size() - 1)];
 }

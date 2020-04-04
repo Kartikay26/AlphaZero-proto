@@ -39,4 +39,13 @@ ostream &operator<<(ostream &out, Output &o)
     return out;
 }
 
+void NeuralNet::dump_to_file()
+{
+    ofstream fdump("nndump.txt");
+    for (auto &[s, o] : trained)
+    {
+        fdump << s << ' ' << o << endl;
+    }
+}
+
 // ==================================================================

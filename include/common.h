@@ -137,6 +137,7 @@ public:
     Output predict(Image i);
     void train(Image i, Output o);
     int known_states() { return trained.size(); }
+    void dump_to_file();
 };
 
 class Image

@@ -9,7 +9,6 @@ void selfplay()
 {
     static int num_games;
     num_games++;
-    clog << "Game #" << num_games << endl;
     GameState g;
     vector<pair<GameState, Output>> history;
     while (not g.terminated())
@@ -18,8 +17,17 @@ void selfplay()
         history.push_back({g, {0, probs}}); // evaluation to be filled in later
         int action = sample(probs);
         g = g.playAction(action);
+        clog << action;
     }
+
     Outcome game_outcome = g.evaluate();
+    map<Outcome, char> mapping = {
+        {Outcome::draw, '.'},
+        {Outcome::first_won, 'x'},
+        {Outcome::second_won, 'o'},
+    };
+    clog << " -> " << mapping[game_outcome] << endl;
+
     if (game_outcome != Outcome::draw)
     {
         for (auto &[h, h_output] : history)
@@ -37,7 +45,6 @@ void selfplay()
     for (auto &[g, o] : history)
     {
         buffer.insert(g, o);
-        clog << g << " -> " << o << endl;
     }
 }
 
@@ -78,5 +85,6 @@ void mainLoop()
             selfplay();
         for (int i = 0; i < TRAINING_STEPS; i++)
             training();
+        nnet.dump_to_file();
     }
 }
