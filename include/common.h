@@ -72,16 +72,15 @@ extern ofstream clog;
 
 // ========================== tictactoe.cpp =========================
 
-class GameState
-{
+class GameState {
     friend class Image;
 
-private:
+   private:
     Square board[BOARD_SIZE];
 
-public:
-    GameState();         // root of game tree
-    GameState(string s); // from string repr
+   public:
+    GameState();          // root of game tree
+    GameState(string s);  // from string repr
     Player turn();
     bool checkPlayerWon(Player p);
     Outcome evaluate();
@@ -89,16 +88,13 @@ public:
     array<bool, MAX_ACTIONS> getPossibleActions();
     GameState playAction(int action);
 
-    friend ostream &operator<<(ostream &out, GameState &g); // print
+    friend ostream& operator<<(ostream& out, GameState& g);  // print
     string hash();
 };
 
-class InvalidMove : exception
-{
-};
+class InvalidMove : exception {};
 
-enum class Square
-{
+enum class Square {
     first,
     second,
     empty,
@@ -106,16 +102,14 @@ enum class Square
 
 char represent(Square sq);
 
-enum class Player
-{
+enum class Player {
     first = int(Square::first),
     second = int(Square::second),
 };
 
 Player opponent(Player p);
 
-enum class Outcome
-{
+enum class Outcome {
     first_won = int(Player::first),
     second_won = int(Player::second),
     running,
@@ -128,43 +122,41 @@ bool isTerminal(Outcome o);
 
 // Fake neural net, for now
 
-class NeuralNet
-{
-private:
+class NeuralNet {
+   private:
     map<string, Output> trained;
 
-public:
+   public:
     Output predict(Image i);
     void train(Image i, Output o);
     int known_states() { return trained.size(); }
     void dump_to_file();
 };
 
-class Image
-{
+class Image {
     friend class NeuralNet;
 
-private:
+   private:
     string hash;
 
-public:
+   public:
     Image(GameState g);
 };
 
-class Output
-{
-public:
+class Output {
+   public:
     float evaluation;
     array<float, MAX_ACTIONS> policy;
 
-    friend ostream &operator<<(ostream &out, Output &g); // print
+    friend ostream& operator<<(ostream& out, Output& g);  // print
 };
 
 // ========================== evaluate.cpp ==========================
 
 int randomMove(GameState g);
 
-Outcome playGame(function<int(GameState)> player1, function<int(GameState)> player2);
+Outcome playGame(function<int(GameState)> player1,
+                 function<int(GameState)> player2);
 
 pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
 
@@ -173,27 +165,26 @@ pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
 int randomInt(int min, int max);
 float randomFloat(float min, float max);
 
-int sample(const array<float, MAX_ACTIONS> &a);
+int sample(const array<float, MAX_ACTIONS>& a);
 
 string spaces(int n, char c = ' ');
 
 // ============================ mcts.cpp ============================
 
-array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet &nnet);
+array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet& nnet);
 
-float simulate(GameState s, NeuralNet &nnet, int depth = 0);
+float simulate(GameState s, NeuralNet& nnet, int depth = 0);
 
-array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet &nnet);
+array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet& nnet);
 
 // ========================= replaybuffer.cpp =======================
 
-class ReplayBuffer
-{
-private:
+class ReplayBuffer {
+   private:
     int size;
     deque<pair<GameState, Output>> queue;
 
-public:
+   public:
     ReplayBuffer(int size) : size(size) {}
 
     void insert(GameState g, Output o);

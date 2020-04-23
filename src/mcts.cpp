@@ -2,9 +2,9 @@
 
 set<string> visited;
 
-map<pair<string, int>, int> N;   // N(s, a) -- visit count
-map<pair<string, int>, float> P; // P(s, a) -- prior probabilities
-map<pair<string, int>, float> Q; // Q(s, a) -- action value function
+map<pair<string, int>, int> N;    // N(s, a) -- visit count
+map<pair<string, int>, float> P;  // P(s, a) -- prior probabilities
+map<pair<string, int>, float> Q;  // Q(s, a) -- action value function
 
 // ========================= mcts core ==============================
 
@@ -14,22 +14,19 @@ map<pair<string, int>, float> Q; // Q(s, a) -- action value function
 //     return uniform(g, nnet);
 // }
 
-array<float, MAX_ACTIONS> mcts(GameState root, NeuralNet &nnet)
-{
+array<float, MAX_ACTIONS> mcts(GameState root, NeuralNet& nnet) {
     visited.clear();
     N.clear();
     P.clear();
     Q.clear();
     // perform NUM_SIMULATIONS simulations to leaf nodes...
-    for (int i = 0; i < NUM_SIMULATIONS; i++)
-    {
+    for (int i = 0; i < NUM_SIMULATIONS; i++) {
         simulate(root, nnet, true);
     }
 
     // ...and then report probs proportional to visit counts at root.
     array<float, MAX_ACTIONS> probs;
-    for (int a = 0; a < MAX_ACTIONS; a++)
-    {
+    for (int a = 0; a < MAX_ACTIONS; a++) {
         probs[a] = N[{root.hash(), a}] / float(NUM_SIMULATIONS - 1);
     }
     return probs;
@@ -37,39 +34,33 @@ array<float, MAX_ACTIONS> mcts(GameState root, NeuralNet &nnet)
 
 // ====================== mcts simulate algo ========================
 
-float simulate(GameState s, NeuralNet &nnet, int depth) // -> returns evaluation of state s acc to s's player
+float simulate(GameState s,
+               NeuralNet& nnet,
+               int depth)  // -> returns evaluation of state s acc to s's player
 {
-
-    if (s.terminated())
-    {
+    if (s.terminated()) {
         Outcome actual_outcome = s.evaluate();
-        if (actual_outcome == Outcome(s.turn()))
-        {
+        if (actual_outcome == Outcome(s.turn())) {
             return +1;
-        }
-        else if (actual_outcome == Outcome(opponent(s.turn())))
-        {
+        } else if (actual_outcome == Outcome(opponent(s.turn()))) {
             return -1;
-        }
-        else // draw
+        } else  // draw
         {
             return 0;
         }
     }
 
-    if (not visited.count(s.hash())) // a new node has been reached
+    if (not visited.count(s.hash()))  // a new node has been reached
     {
         // add to visited
         visited.insert(s.hash());
         // evaluate the new node and store the probs etc
         Output output = nnet.predict(Image(s));
         array<float, MAX_ACTIONS> cur_probs = output.policy;
-        if (depth == 0)
-        {
+        if (depth == 0) {
             cur_probs = uniform(s, nnet);
         }
-        for (int a = 0; a < MAX_ACTIONS; a++)
-        {
+        for (int a = 0; a < MAX_ACTIONS; a++) {
             P[{s.hash(), a}] = cur_probs[a];
         }
         // return the output of the evaluation
@@ -90,8 +81,7 @@ float simulate(GameState s, NeuralNet &nnet, int depth) // -> returns evaluation
     for (int b = 0; b < MAX_ACTIONS; b++)
         total_branches_down += N[{s.hash(), b}];
 
-    for (int a = 0; a < MAX_ACTIONS; a++)
-    {
+    for (int a = 0; a < MAX_ACTIONS; a++) {
         if (not possible[a])
             continue;
 
@@ -100,10 +90,10 @@ float simulate(GameState s, NeuralNet &nnet, int depth) // -> returns evaluation
         float cur_q = Q[{s.hash(), a}];
         float cur_p = P[{s.hash(), a}];
 
-        float cur_u = cur_q + C_PUCT * cur_p * sqrt(total_branches_down) / (1 + cur_n);
+        float cur_u =
+            cur_q + C_PUCT * cur_p * sqrt(total_branches_down) / (1 + cur_n);
 
-        if (cur_u > best_u)
-        {
+        if (cur_u > best_u) {
             best_action = a;
             best_u = cur_u;
         }
@@ -111,7 +101,8 @@ float simulate(GameState s, NeuralNet &nnet, int depth) // -> returns evaluation
 
     // simulate down from new_s produced by best_action
     GameState new_s = s.playAction(best_action);
-    float value = -simulate(new_s, nnet, depth + 1); // negative sign because we hate our opponent
+    float value = -simulate(
+        new_s, nnet, depth + 1);  // negative sign because we hate our opponent
 
     // update N and Q value for (s,a)
 
@@ -125,19 +116,14 @@ float simulate(GameState s, NeuralNet &nnet, int depth) // -> returns evaluation
     return value;
 }
 
-array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet &nnet)
-{
+array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet& nnet) {
     auto actions = g.getPossibleActions();
     int num_actions = accumulate(actions.begin(), actions.end(), 0);
     array<float, MAX_ACTIONS> probs;
-    for (int i = 0; i < MAX_ACTIONS; i++)
-    {
-        if (actions[i])
-        {
+    for (int i = 0; i < MAX_ACTIONS; i++) {
+        if (actions[i]) {
             probs[i] = 1. / num_actions;
-        }
-        else
-        {
+        } else {
             probs[i] = 0;
         }
     }

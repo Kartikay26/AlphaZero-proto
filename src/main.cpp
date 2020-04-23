@@ -26,22 +26,19 @@ ofstream clog("logfile.txt");
 
 // ==================================================================
 
-void test(string s)
-{
+void test(string s) {
     GameState g(s);
     cout << g << endl;
     auto result = mcts(g, nnet);
     float d = 0;
-    for (auto &x : result)
-    {
+    for (auto& x : result) {
         cout << x << endl;
         d += x;
     }
     cout << "total: " << d << endl;
 }
 
-int main()
-{
+int main() {
     srand(time(NULL));
 
     initialise();
