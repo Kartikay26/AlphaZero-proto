@@ -4,22 +4,7 @@
 
 #include <bits/stdc++.h>
 
-using std::accumulate;
-using std::any_of;
-using std::array;
-using std::cout;
-using std::deque;
-using std::endl;
-using std::exception;
-using std::function;
-using std::map;
-using std::ofstream;
-using std::ostream;
-using std::ostringstream;
-using std::pair;
-using std::set;
-using std::string;
-using std::vector;
+using namespace std;
 
 // constants
 
@@ -29,6 +14,7 @@ const int MAX_ACTIONS = 9;
 extern const int NUM_EVALUATE;
 extern const int BUFFER_SIZE;
 extern const int TRAINING_BATCH_SIZE;
+extern const int MAX_SELF_PLAY_GAMES;
 
 extern const int SELFPLAY_STEPS;
 extern const int TRAINING_STEPS;
@@ -68,7 +54,7 @@ void mainLoop();
 extern NeuralNet nnet;
 extern ReplayBuffer buffer;
 
-extern ofstream clog;
+extern ofstream log_f;
 
 // ========================== tictactoe.cpp =========================
 
@@ -101,6 +87,7 @@ enum class Square {
 };
 
 char represent(Square sq);
+Square toSquare(char c);
 
 enum class Player {
     first = int(Square::first),

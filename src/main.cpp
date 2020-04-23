@@ -7,13 +7,14 @@
 const int NUM_EVALUATE = 1000;
 const int BUFFER_SIZE = 10000;
 const int TRAINING_BATCH_SIZE = 100;
+const int MAX_SELF_PLAY_GAMES = 500;
 
 const int NUM_SIMULATIONS = 20;
 const float C_PUCT = 1.25;
 
-const int SELFPLAY_STEPS = 10;
+const int SELFPLAY_STEPS = 1;
 const int TRAINING_STEPS = 1;
-const int EVALUATION_STEPS = 1;
+const int EVALUATION_STEPS = 0;
 
 // ==================================================================
 
@@ -22,7 +23,7 @@ const int EVALUATION_STEPS = 1;
 NeuralNet nnet;
 ReplayBuffer buffer(BUFFER_SIZE);
 
-ofstream clog("logfile.txt");
+ofstream log_f("logfile.txt");
 
 // ==================================================================
 

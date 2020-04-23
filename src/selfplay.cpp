@@ -14,7 +14,7 @@ void selfplay() {
         history.push_back({g, {0, probs}});  // evaluation to be filled in later
         int action = sample(probs);
         g = g.playAction(action);
-        clog << action;
+        log_f << action;
     }
 
     Outcome game_outcome = g.evaluate();
@@ -23,7 +23,7 @@ void selfplay() {
         {Outcome::first_won, 'x'},
         {Outcome::second_won, 'o'},
     };
-    clog << " -> " << mapping[game_outcome] << endl;
+    log_f << " -> " << mapping[game_outcome] << endl;
 
     if (game_outcome != Outcome::draw) {
         for (auto& [h, h_output] : history) {
@@ -60,7 +60,8 @@ void evaluation() {
 }
 
 void mainLoop() {
-    while (true) {
+    int game_count = 0;
+    while (game_count != MAX_SELF_PLAY_GAMES) {
         // approximation for running jobs in parallel
         for (int i = 0; i < EVALUATION_STEPS; i++)
             evaluation();
@@ -68,6 +69,7 @@ void mainLoop() {
             selfplay();
         for (int i = 0; i < TRAINING_STEPS; i++)
             training();
-        nnet.dump_to_file();
+        // nnet.dump_to_file();
+        game_count++;
     }
 }

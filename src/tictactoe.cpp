@@ -1,5 +1,10 @@
 #include "common.h"
 
+vector<vector<int>> winningCombinations = {
+    {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6},
+    {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6},
+};
+
 GameState::GameState() {
     for (Square& sq : board) {
         sq = Square::empty;
@@ -7,11 +12,6 @@ GameState::GameState() {
 }
 
 GameState::GameState(string str) {
-    map<char, Square> mapping = {
-        {'.', Square::empty},
-        {'x', Square::first},
-        {'o', Square::second},
-    };
     // string: 0123456789012
     //         [xox|x.x|ooo]
     // board:  .012.345.678.
@@ -32,7 +32,7 @@ GameState::GameState(string str) {
         // 9 - x
     };
     for (auto [s, b] : pos_map) {
-        board[b] = mapping[str[s]];
+        board[b] = toSquare(str[s]);
     }
 }
 
@@ -52,11 +52,6 @@ Player GameState::turn() {
 }
 
 bool GameState::checkPlayerWon(Player p) {
-    vector<vector<int>> winningCombinations = {
-        {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, {0, 3, 6},
-        {1, 4, 7}, {2, 5, 8}, {0, 4, 8}, {2, 4, 6},
-    };
-
     for (vector<int>& v : winningCombinations) {
         bool all = true;
         for (int i : v) {
@@ -148,12 +143,25 @@ string GameState::hash() {
 }
 
 char represent(Square sq) {
-    map<Square, char> mapping = {
-        {Square::empty, '.'},
-        {Square::first, 'x'},
-        {Square::second, 'o'},
-    };
-    return mapping[sq];
+    switch (sq) {
+        case Square::empty:
+            return '.';
+        case Square::first:
+            return 'x';
+        case Square::second:
+            return 'o';
+    }
+}
+
+Square toSquare(char c) {
+    switch (c) {
+        case '.':
+            return Square::empty;
+        case 'x':
+            return Square::first;
+        case 'o':
+            return Square::second;
+    }
 }
 
 Player opponent(Player p) {
