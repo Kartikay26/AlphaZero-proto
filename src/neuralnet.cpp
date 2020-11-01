@@ -6,7 +6,7 @@ Output NeuralNet::predict(Image i) {
     } else {
         Output o;
         o.evaluation = 0;
-        for (float& p : o.policy) {
+        for (double& p : o.policy) {
             p = 1. / MAX_ACTIONS;
         }
         return o;
@@ -23,7 +23,7 @@ Image::Image(GameState g) {
 
 ostream& operator<<(ostream& out, Output& o) {
     out << o.evaluation << " [ ";
-    for (float& p : o.policy) {
+    for (double& p : o.policy) {
         out << p << " ";
     }
     out << "]";

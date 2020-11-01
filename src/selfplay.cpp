@@ -70,6 +70,9 @@ void mainLoop() {
         for (int i = 0; i < TRAINING_STEPS; i++)
             training();
         // nnet.dump_to_file();
+        if (game_count % 100 == 0) {
+            cout << game_count * 10 << endl;
+        }
         game_count++;
     }
 }

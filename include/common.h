@@ -34,7 +34,7 @@ extern const int TRAINING_STEPS;
 extern const int EVALUATION_STEPS;
 
 extern const int NUM_SIMULATIONS;
-extern const float C_PUCT;
+extern const double C_PUCT;
 
 // ==================================================================
 // ========================== tictactoe.cpp =========================
@@ -145,8 +145,8 @@ class Image {
 
 class Output {
    public:
-    float evaluation;
-    array<float, MAX_ACTIONS> policy;
+    double evaluation;
+    array<double, MAX_ACTIONS> policy;
 
     friend ostream& operator<<(ostream& out, Output& g);  // print
 };
@@ -163,19 +163,19 @@ pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
 // =========================== helpers.cpp ==========================
 
 int randomInt(int min, int max);
-float randomFloat(float min, float max);
+double randomDouble(double min, double max);
 
-int sample(const array<float, MAX_ACTIONS>& a);
+int sample(const array<double, MAX_ACTIONS>& a);
 
 string spaces(int n, char c = ' ');
 
 // ============================ mcts.cpp ============================
 
-array<float, MAX_ACTIONS> mcts(GameState g, NeuralNet& nnet);
+array<double, MAX_ACTIONS> mcts(GameState g, NeuralNet& nnet);
 
-float simulate(GameState s, NeuralNet& nnet, int depth = 0);
+double simulate(GameState s, NeuralNet& nnet, int depth = 0);
 
-array<float, MAX_ACTIONS> uniform(GameState g, NeuralNet& nnet);
+array<double, MAX_ACTIONS> uniform(GameState g, NeuralNet& nnet);
 
 // ========================= replaybuffer.cpp =======================
 

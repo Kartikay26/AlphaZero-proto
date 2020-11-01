@@ -7,12 +7,12 @@
 const int NUM_EVALUATE = 1000;
 const int BUFFER_SIZE = 10000;
 const int TRAINING_BATCH_SIZE = 100;
-const int MAX_SELF_PLAY_GAMES = 500;
+const int MAX_SELF_PLAY_GAMES = 10000;
 
 const int NUM_SIMULATIONS = 20;
-const float C_PUCT = 1.25;
+const double C_PUCT = 1.25;
 
-const int SELFPLAY_STEPS = 1;
+const int SELFPLAY_STEPS = 10;
 const int TRAINING_STEPS = 1;
 const int EVALUATION_STEPS = 0;
 
@@ -31,7 +31,7 @@ void test(string s) {
     GameState g(s);
     cout << g << endl;
     auto result = mcts(g, nnet);
-    float d = 0;
+    double d = 0;
     for (auto& x : result) {
         cout << x << endl;
         d += x;
@@ -40,7 +40,7 @@ void test(string s) {
 }
 
 int main() {
-    srand(time(NULL));
+    // srand(time(NULL));
 
     initialise();
     mainLoop();

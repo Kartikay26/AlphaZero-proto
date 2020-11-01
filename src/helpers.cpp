@@ -4,17 +4,18 @@ int randomInt(int min, int max) {
     return min + rand() % ((max + 1) - min);
 }
 
-float randomFloat(float min, float max) {
-    float r = float(rand()) / float(RAND_MAX);
+double randomDouble(double min, double max) {
+    double r = double(rand()) / double(RAND_MAX);
     return min + r * (max - min);
 }
 
-int sample(const array<float, MAX_ACTIONS>& a) {
-    float f = randomFloat(0, 1);
-    float c = 0;
+int sample(const array<double, MAX_ACTIONS>& a) {
+    double eps = 0.0001;
+    double f = randomDouble(0+eps, 1-eps);
+    double c = 0;
     for (int i = 0; i < MAX_ACTIONS; i++) {
         c += a[i];
-        if (f <= c) {
+        if (f < c) {
             return i;
         }
     }
