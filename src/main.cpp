@@ -29,9 +29,7 @@ ofstream log_f("logfile.txt");
 
 int main() {
     // srand(time(NULL));
-    
     cout << fixed << setprecision(5);
-    
     mainLoop();
 }
 

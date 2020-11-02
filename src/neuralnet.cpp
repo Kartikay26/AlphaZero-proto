@@ -9,37 +9,36 @@ NeuralNet::NeuralNet() {
     net.add_layer(new FullyConnected<ReLU>(10, 10));
     net.init(0, 0.1);
     opt.m_lrate = 0.1;
-    MiniDNN::VerboseCallback callback;
     net.set_callback(callback);
     net.set_output(new RegressionMSE());
 }
 
-Output::Output(Eigen::VectorXd vec) {
+Output::Output(Matrix vec) {
     for (int i = 0; i < 9; i++)
     {
-        policy[i] = vec[i];
+        policy[i] = vec(i, 0);
     }
-    evaluation = vec[9];
+    evaluation = vec(9, 0);
 }
 
 Output NeuralNet::predict(Image i) {
-    Eigen::VectorXd v = net.predict(i.mat);
+    Matrix v = net.predict(i.mat);
     return Output(v);
 }
 
-Eigen::VectorXd  Output::toVec() {
-    Eigen::VectorXd vec(10);
+Matrix  Output::toMat() {
+    Matrix vec(10, 1);
     for (int i = 0; i < 9; i++) {
-        vec[i] = policy[i];
+        vec(i, 0) = policy[i];
     }
-    vec[9] = evaluation;
+    vec(9, 0) = evaluation;
     return vec;
 }
 
 void NeuralNet::train(Image i, Output o) {
     auto x = i.mat;
-    auto y = o.toVec();
-    // net.fit(opt, x, y, 1, 1);
+    auto y = o.toMat();
+    net.fit(opt, x, y, 1, 1);
 }
 
 Image::Image(GameState g) : mat(9, 1) {

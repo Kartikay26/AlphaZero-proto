@@ -122,12 +122,13 @@ bool isTerminal(Outcome o);
 
 // ========================== neuralnet.cpp =========================
 
-// Fake neural net, for now
+typedef Eigen::MatrixXd Matrix;
 
 class NeuralNet {
    private:
     MiniDNN::Network net;
     MiniDNN::SGD opt;
+    MiniDNN::VerboseCallback callback;
 
    public:
     NeuralNet();
@@ -137,13 +138,11 @@ class NeuralNet {
 };
 
 class Image {
-    friend class NeuralNet;
-    Eigen::VectorXd mat;
-
    private:
     string hash;
 
    public:
+    Matrix mat;
     Image(GameState g);
 };
 
@@ -154,8 +153,8 @@ class Output {
 
     Output(double eval, array<double, MAX_ACTIONS> pol)
         : evaluation(eval), policy(pol) {};
-    Output(Eigen::VectorXd vec);
-    Eigen::VectorXd toVec();
+    Output(Matrix vec);
+    Matrix toMat();
     friend ostream& operator<<(ostream& out, Output& g);  // print
 };
 
