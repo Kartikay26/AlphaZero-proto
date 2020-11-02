@@ -1,9 +1,5 @@
 #include "common.h"
 
-void initialise() {
-    cout << "won, drawn, lost, invalid, known states / 5" << endl;
-}
-
 void selfplay() {
     static int num_games;
     num_games++;
@@ -11,7 +7,7 @@ void selfplay() {
     vector<pair<GameState, Output>> history;
     while (not g.terminated()) {
         auto probs = mcts(g, nnet);
-        history.push_back({g, {0, probs}});  // evaluation to be filled in later
+        history.push_back({g, Output(0, probs)});  // evaluation to be filled in later
         int action = sample(probs);
         g = g.playAction(action);
         log_f << action;
@@ -43,6 +39,7 @@ void training() {
     for (int i = 0; i < TRAINING_BATCH_SIZE; i++) {
         auto [g, o] = buffer.sample();
         nnet.train(Image(g), o);
+        cout << g << o << endl;
     }
 }
 
@@ -55,8 +52,13 @@ void evaluation() {
     auto [completed, invalid] = result;
     auto [won, drawn] = completed;
     int lost = NUM_EVALUATE - (won + drawn);
-    cout << won << ", " << drawn << ", " << lost << ", " << invalid << ", "
-         << nnet.known_states() / 5 << endl;
+    cout << won << ", " << drawn << ", " << lost << ", " << invalid << endl;
+}
+
+void test(string s) {
+    GameState g(s);
+    auto result = nnet.predict(Image(g));
+    cout << result << endl;
 }
 
 void mainLoop() {
@@ -69,10 +71,8 @@ void mainLoop() {
             selfplay();
         for (int i = 0; i < TRAINING_STEPS; i++)
             training();
-        // nnet.dump_to_file();
-        if (game_count % 100 == 0) {
-            cout << game_count * 10 << endl;
-        }
+        nnet.dump_to_file();
+        test("[...|...|...]");
         game_count++;
     }
 }

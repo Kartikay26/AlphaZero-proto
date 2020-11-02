@@ -27,22 +27,11 @@ ofstream log_f("logfile.txt");
 
 // ==================================================================
 
-void test(string s) {
-    GameState g(s);
-    cout << g << endl;
-    auto result = mcts(g, nnet);
-    double d = 0;
-    for (auto& x : result) {
-        cout << x << endl;
-        d += x;
-    }
-    cout << "total: " << d << endl;
-}
-
 int main() {
     // srand(time(NULL));
-
-    initialise();
+    
+    cout << fixed << setprecision(5);
+    
     mainLoop();
 }
 

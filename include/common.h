@@ -3,6 +3,7 @@
 // from stdlib
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <random>
 #include <time.h>
@@ -16,6 +17,8 @@
 #include <set>
 #include <deque>
 #include <functional>
+
+#include <MiniDNN/MiniDNN.h>
 
 using namespace std;
 
@@ -57,7 +60,6 @@ class ReplayBuffer;
 
 // =========================== selfplay.cpp =========================
 
-void initialise();
 void mainLoop();
 
 // ==================================================================
@@ -124,17 +126,19 @@ bool isTerminal(Outcome o);
 
 class NeuralNet {
    private:
-    map<string, Output> trained;
+    MiniDNN::Network net;
+    MiniDNN::SGD opt;
 
    public:
+    NeuralNet();
     Output predict(Image i);
     void train(Image i, Output o);
-    int known_states() { return trained.size(); }
     void dump_to_file();
 };
 
 class Image {
     friend class NeuralNet;
+    Eigen::VectorXd mat;
 
    private:
     string hash;
@@ -148,6 +152,10 @@ class Output {
     double evaluation;
     array<double, MAX_ACTIONS> policy;
 
+    Output(double eval, array<double, MAX_ACTIONS> pol)
+        : evaluation(eval), policy(pol) {};
+    Output(Eigen::VectorXd vec);
+    Eigen::VectorXd toVec();
     friend ostream& operator<<(ostream& out, Output& g);  // print
 };
 
