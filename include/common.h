@@ -133,7 +133,7 @@ class NeuralNet {
    public:
     NeuralNet();
     Output predict(Image i);
-    void train(Image i, Output o);
+    void train(Matrix gamestates, Matrix outputs);
     void dump_to_file();
 };
 

@@ -11,7 +11,7 @@ NeuralNet::NeuralNet() {
     net.add_layer(new FullyConnected<Softmax>(10, 10));
     net.init(0, 0.1);
     opt.m_lrate = 0.1;
-    net.set_callback(callback);
+    // net.set_callback(callback);
     net.set_output(new RegressionMSE());
 }
 
@@ -37,10 +37,9 @@ Matrix  Output::toMat() {
     return vec;
 }
 
-void NeuralNet::train(Image i, Output o) {
-    auto x = i.mat;
-    auto y = o.toMat();
-    net.fit(opt, x, y, 1, 10);
+void NeuralNet::train(Matrix gamestates, Matrix outputs) {
+    net.fit(opt, gamestates, outputs, TRAINING_BATCH_SIZE, 1000);
+    // auto loss = net.get_output()->loss();
 }
 
 Image::Image(GameState g) : mat(9, 1) {

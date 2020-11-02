@@ -12,7 +12,7 @@ const int MAX_SELF_PLAY_GAMES = 10000;
 const int NUM_SIMULATIONS = 20;
 const double C_PUCT = 1.25;
 
-const int SELFPLAY_STEPS = 10;
+const int SELFPLAY_STEPS = 100;
 const int TRAINING_STEPS = 1;
 const int EVALUATION_STEPS = 1;
 

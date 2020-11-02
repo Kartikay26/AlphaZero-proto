@@ -36,10 +36,15 @@ void selfplay() {
 }
 
 void training() {
+    Matrix gamestates(9, TRAINING_BATCH_SIZE);
+    Matrix outputs(10, TRAINING_BATCH_SIZE);
     for (int i = 0; i < TRAINING_BATCH_SIZE; i++) {
         auto [g, o] = buffer.sample();
-        nnet.train(Image(g), o);
+        auto im = Image(g).mat;
+        gamestates.col(i) = im;
+        outputs.col(i) = o.toMat();
     }
+    nnet.train(gamestates, outputs);
 }
 
 void evaluation() {
