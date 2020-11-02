@@ -39,7 +39,6 @@ void training() {
     for (int i = 0; i < TRAINING_BATCH_SIZE; i++) {
         auto [g, o] = buffer.sample();
         nnet.train(Image(g), o);
-        cout << g << o << endl;
     }
 }
 
@@ -55,12 +54,6 @@ void evaluation() {
     cout << won << ", " << drawn << ", " << lost << ", " << invalid << endl;
 }
 
-void test(string s) {
-    GameState g(s);
-    auto result = nnet.predict(Image(g));
-    cout << result << endl;
-}
-
 void mainLoop() {
     int game_count = 0;
     while (game_count != MAX_SELF_PLAY_GAMES) {
@@ -72,7 +65,6 @@ void mainLoop() {
         for (int i = 0; i < TRAINING_STEPS; i++)
             training();
         nnet.dump_to_file();
-        test("[...|...|...]");
         game_count++;
     }
 }

@@ -14,7 +14,7 @@ const double C_PUCT = 1.25;
 
 const int SELFPLAY_STEPS = 10;
 const int TRAINING_STEPS = 1;
-const int EVALUATION_STEPS = 0;
+const int EVALUATION_STEPS = 1;
 
 // ==================================================================
 

@@ -1,12 +1,14 @@
 #include "common.h"
 
 using MiniDNN::FullyConnected;
-using MiniDNN::ReLU;
 using MiniDNN::RegressionMSE;
+using MiniDNN::ReLU;
+using MiniDNN::Softmax;
 
 NeuralNet::NeuralNet() {
     net.add_layer(new FullyConnected<ReLU>(9, 10));
     net.add_layer(new FullyConnected<ReLU>(10, 10));
+    net.add_layer(new FullyConnected<Softmax>(10, 10));
     net.init(0, 0.1);
     opt.m_lrate = 0.1;
     net.set_callback(callback);
@@ -18,7 +20,7 @@ Output::Output(Matrix vec) {
     {
         policy[i] = vec(i, 0);
     }
-    evaluation = vec(9, 0);
+    evaluation = vec(9, 0) * 2 - 0.5;
 }
 
 Output NeuralNet::predict(Image i) {
@@ -31,14 +33,14 @@ Matrix  Output::toMat() {
     for (int i = 0; i < 9; i++) {
         vec(i, 0) = policy[i];
     }
-    vec(9, 0) = evaluation;
+    vec(9, 0) = evaluation/2. + 0.5;
     return vec;
 }
 
 void NeuralNet::train(Image i, Output o) {
     auto x = i.mat;
     auto y = o.toMat();
-    net.fit(opt, x, y, 1, 1);
+    net.fit(opt, x, y, 1, 10);
 }
 
 Image::Image(GameState g) : mat(9, 1) {
