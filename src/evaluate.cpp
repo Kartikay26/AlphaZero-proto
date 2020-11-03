@@ -1,6 +1,6 @@
 #include "common.h"
 
-pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove) {
+tuple<int, int, int, int> evaluate(function<int(GameState g)> selectMove) {
     // play NUM_EVALUATE games against random agents
     // and return number of games won and drawn by our function as first element
     // returns number of games failed by invalid move in second element
@@ -30,8 +30,8 @@ pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove) {
             games_invalid++;
         }
     }
-
-    return {{games_won, games_drawn}, games_invalid};
+    int games_lost = NUM_EVALUATE - (games_won + games_drawn + games_invalid);
+    return {games_won, games_drawn, games_lost, games_invalid};
 }
 
 int randomMove(GameState g) {

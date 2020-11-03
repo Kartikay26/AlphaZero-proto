@@ -47,29 +47,11 @@ void training() {
     nnet.train(gamestates, outputs);
 }
 
-void evaluation() {
+tuple<int, int, int, int> evaluation() {
     auto result = evaluate([](GameState g) -> int {
         auto probs = nnet.predict(Image(g)).policy;
         // auto probs = mcts(g, nnet);
         return sample(probs);
     });
-    auto [completed, invalid] = result;
-    auto [won, drawn] = completed;
-    int lost = NUM_EVALUATE - (won + drawn);
-    cout << won << ", " << drawn << ", " << lost << ", " << invalid << endl;
-}
-
-void mainLoop() {
-    int game_count = 0;
-    while (game_count != MAX_SELF_PLAY_GAMES) {
-        // approximation for running jobs in parallel
-        for (int i = 0; i < EVALUATION_STEPS; i++)
-            evaluation();
-        for (int i = 0; i < SELFPLAY_STEPS; i++)
-            selfplay();
-        for (int i = 0; i < TRAINING_STEPS; i++)
-            training();
-        nnet.dump_to_file();
-        game_count++;
-    }
+    return result;
 }

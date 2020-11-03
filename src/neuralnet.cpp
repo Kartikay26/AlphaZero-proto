@@ -1,19 +1,8 @@
 #include "common.h"
 
-using MiniDNN::FullyConnected;
-using MiniDNN::RegressionMSE;
-using MiniDNN::ReLU;
-using MiniDNN::Softmax;
+/// NEURALNET INIT IN MAIN
 
-NeuralNet::NeuralNet() {
-    net.add_layer(new FullyConnected<ReLU>(9, 10));
-    net.add_layer(new FullyConnected<ReLU>(10, 10));
-    net.add_layer(new FullyConnected<Softmax>(10, 10));
-    net.init(0, 0.1);
-    opt.m_lrate = 0.1;
-    // net.set_callback(callback);
-    net.set_output(new RegressionMSE());
-}
+// NeuralNet::NeuralNet() ;
 
 Output::Output(Matrix vec) {
     for (int i = 0; i < 9; i++)
@@ -38,8 +27,8 @@ Matrix  Output::toMat() {
 }
 
 void NeuralNet::train(Matrix gamestates, Matrix outputs) {
-    net.fit(opt, gamestates, outputs, TRAINING_BATCH_SIZE, 1000);
-    // auto loss = net.get_output()->loss();
+    net.fit(opt, gamestates, outputs, TRAINING_BATCH_SIZE, TRAINING_EPOCHS);
+    loss = net.get_output()->loss();
 }
 
 Image::Image(GameState g) : mat(9, 1) {

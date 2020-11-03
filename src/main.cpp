@@ -4,15 +4,17 @@
 
 // config
 
-const int NUM_EVALUATE = 1000;
+const int NUM_EVALUATE = 10;
 const int BUFFER_SIZE = 10000;
-const int TRAINING_BATCH_SIZE = 100;
+const int TRAINING_BATCH_SIZE = 10;
+const int TRAINING_EPOCHS = 10;
+const double TRAINING_LEARNING_RATE = 1.0;
 const int MAX_SELF_PLAY_GAMES = 10000;
 
 const int NUM_SIMULATIONS = 20;
 const double C_PUCT = 1.25;
 
-const int SELFPLAY_STEPS = 100;
+const int SELFPLAY_STEPS = 1;
 const int TRAINING_STEPS = 1;
 const int EVALUATION_STEPS = 1;
 
@@ -27,10 +29,43 @@ ofstream log_f("logfile.txt");
 
 // ==================================================================
 
+using MiniDNN::FullyConnected;
+using MiniDNN::RegressionMSE;
+using MiniDNN::ReLU;
+using MiniDNN::Sigmoid;
+using MiniDNN::Softmax;
+
+NeuralNet::NeuralNet() {
+    net.add_layer(new FullyConnected<Sigmoid>(9, 50));
+    net.add_layer(new FullyConnected<Softmax>(50, 10));
+    net.init(0, 0.1);
+    opt.m_lrate = TRAINING_LEARNING_RATE;
+    // net.set_callback(callback);
+    net.set_output(new RegressionMSE());
+}
+
 int main() {
     // srand(time(NULL));
     cout << fixed << setprecision(5);
-    mainLoop();
+    cout << "win, draw, lost, nloss" << endl;
+    int game_count = 0;
+    while (game_count != MAX_SELF_PLAY_GAMES) {
+        int won, drawn, lost, invalid;
+        // approximation for running jobs in parallel
+        for (int i = 0; i < EVALUATION_STEPS; i++)
+            tie(won, drawn, lost, invalid) = evaluation();
+        for (int i = 0; i < SELFPLAY_STEPS; i++)
+            selfplay();
+        for (int i = 0; i < TRAINING_STEPS; i++)
+            training();
+        nnet.dump_to_file();
+        game_count++;
+        if (game_count % 1000 == 0) {
+            nnet.opt.m_lrate /= 2;
+        }
+        cout << won << ", " << drawn << ", " << lost << ", "
+             << nnet.loss * NUM_EVALUATE << endl;
+    }
 }
 
 // ==================================================================

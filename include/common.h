@@ -30,6 +30,8 @@ const int MAX_ACTIONS = 9;
 extern const int NUM_EVALUATE;
 extern const int BUFFER_SIZE;
 extern const int TRAINING_BATCH_SIZE;
+extern const int TRAINING_EPOCHS;
+extern const double TRAINING_LEARNING_RATE;
 extern const int MAX_SELF_PLAY_GAMES;
 
 extern const int SELFPLAY_STEPS;
@@ -58,9 +60,11 @@ class Output;
 
 class ReplayBuffer;
 
-// =========================== selfplay.cpp =========================
+// ========================= replaybuffer.cpp =======================
 
-void mainLoop();
+void selfplay();
+void training();
+tuple<int, int, int, int> evaluation();
 
 // ==================================================================
 
@@ -125,16 +129,16 @@ bool isTerminal(Outcome o);
 typedef Eigen::MatrixXd Matrix;
 
 class NeuralNet {
-   private:
+   public:
     MiniDNN::Network net;
     MiniDNN::SGD opt;
     MiniDNN::VerboseCallback callback;
 
-   public:
     NeuralNet();
     Output predict(Image i);
     void train(Matrix gamestates, Matrix outputs);
     void dump_to_file();
+    double loss;
 };
 
 class Image {
@@ -165,7 +169,7 @@ int randomMove(GameState g);
 Outcome playGame(function<int(GameState)> player1,
                  function<int(GameState)> player2);
 
-pair<pair<int, int>, int> evaluate(function<int(GameState g)> selectMove);
+tuple<int, int, int, int> evaluate(function<int(GameState g)> selectMove);
 
 // =========================== helpers.cpp ==========================
 
