@@ -132,7 +132,7 @@ class NeuralNet {
    public:
     MiniDNN::Network net;
     MiniDNN::SGD opt;
-    MiniDNN::VerboseCallback callback;
+    MiniDNN::CustomCallback callback;
 
     NeuralNet();
     Output predict(Image i);

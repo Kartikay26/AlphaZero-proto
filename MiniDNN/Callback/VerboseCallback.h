@@ -36,6 +36,29 @@ class VerboseCallback: public Callback
 };
 
 
+///
+/// \ingroup Callbacks
+///
+/// Callback function that prints the loss function value in each mini-batch training
+///
+class CustomCallback: public Callback
+{
+    public:
+        void post_training_batch(const Network* net, const Matrix& x, const Matrix& y)
+        {
+            const Scalar loss = net->get_output()->loss();
+            std::cout << loss << std::endl;
+        }
+
+        void post_training_batch(const Network* net, const Matrix& x,
+                                 const IntegerVector& y)
+        {
+            Scalar loss = net->get_output()->loss();
+            std::cout << loss << std::endl;
+        }
+};
+
+
 } // namespace MiniDNN
 
 
