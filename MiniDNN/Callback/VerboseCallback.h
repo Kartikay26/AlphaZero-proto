@@ -44,17 +44,25 @@ class VerboseCallback: public Callback
 class CustomCallback: public Callback
 {
     public:
+        Scalar previous_loss = -1;
         void post_training_batch(const Network* net, const Matrix& x, const Matrix& y)
         {
             const Scalar loss = net->get_output()->loss();
-            std::cout << loss << std::endl;
+            if (previous_loss == -1) {
+                previous_loss = loss;
+            }
+            std::cout << loss << ", " << (previous_loss - loss) << std::endl;
+            previous_loss = loss;
         }
 
-        void post_training_batch(const Network* net, const Matrix& x,
-                                 const IntegerVector& y)
+        void post_training_batch(const Network* net, const Matrix& x, const IntegerVector& y)
         {
-            Scalar loss = net->get_output()->loss();
-            std::cout << loss << std::endl;
+            const Scalar loss = net->get_output()->loss();
+            if (previous_loss == -1) {
+                previous_loss = loss;
+            }
+            std::cout << loss << ", " << (previous_loss - loss) << std::endl;
+            previous_loss = loss;
         }
 };
 

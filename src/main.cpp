@@ -48,7 +48,7 @@ int main() {
     // srand(time(NULL));
     cout << fixed << setprecision(5);
     // cout << "win, draw, lost, nloss" << endl;
-    cout << "nloss" << endl;
+    cout << "nloss, learn" << endl;
     int game_count = 0;
     while (game_count != MAX_SELF_PLAY_GAMES) {
         int won, drawn, lost, invalid;

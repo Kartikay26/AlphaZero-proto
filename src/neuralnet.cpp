@@ -27,6 +27,7 @@ Matrix  Output::toMat() {
 }
 
 void NeuralNet::train(Matrix gamestates, Matrix outputs) {
+    callback.previous_loss = -1;
     net.fit(opt, gamestates, outputs, TRAINING_BATCH_SIZE, TRAINING_EPOCHS);
     loss = net.get_output()->loss();
 }
